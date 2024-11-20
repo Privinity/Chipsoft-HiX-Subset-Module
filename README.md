@@ -6,7 +6,13 @@ Op dit moment is de module ontwikkeld en getest op basis van Chipsoft HiX 6.3.
 Naar alle waarschijnlijkheid functioneert de module ook op Chipsoft HiX 6.2 maar dit is nog niet getest.
 
 ## Installatie
-a
+
+1. Start een nieuwe Powershell sessie / terminal
+2. Identificeer de Powershell Module locatie door het onderstaande commando uit te voeren:
+`$Env:PSModulePath`
+
+
+Download de 
 
 ## Gebruik
 a
