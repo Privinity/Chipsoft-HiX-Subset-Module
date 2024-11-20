@@ -1,2 +1,2 @@
 # Chipsoft HiX Subset Powershell Module
-Chipsoft HiX Subset script
+De Chipsoft HiX Subset Module is een Powershell module welke het mogelijk maakt om een gekloonde Chipsoft HiX database te vullen met patiënt gegevens vanuit een - zelf te specificeren - Chipsoft HiX database.
