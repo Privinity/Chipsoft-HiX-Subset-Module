@@ -10,8 +10,9 @@ Naar alle waarschijnlijkheid functioneert de module ook op Chipsoft HiX 6.2 maar
 1. Start een nieuwe Powershell sessie / terminal.
 2. Identificeer de Powershell Module locatie door het volgende commando uit te voeren: `$Env:PSModulePath`.
 3. Download en kopieer de gehele **SubsetHixDatabase** map naar een van deze locaties. Indien je wilt dat alle gebruikers op de machine de module kunnen gebruiken gebruik dan het pad **C:\Program Files\WindowsPowerShell\Modules** (Windows) of **/usr/local/microsoft/powershell/7/Modules** (Linux/Mac).
-4. Importeer de module via het commando `Import-module -Name SubsetHixDatabase`.
-5. Vanaf nu kun je de module gebruiken. Een handig commando om snel een overzicht van de verschillende parameters, als ook voorbeelden te zien, is `Get-Help Start-SubsetHixDatabase -Detailed`.
+4. Download de **table_list.json** en **patientIds.txt** bestanden en pas deze eventueel aan naar je eigen voorkeuren. 
+5. Importeer de module via het commando `Import-module -Name SubsetHixDatabase`.
+6. Vanaf nu kun je de module gebruiken. Een handig commando om snel een overzicht van de verschillende parameters, als ook voorbeelden te zien, is `Get-Help Start-SubsetHixDatabase -Detailed`.
 
 ## Benodigdheden voor uitvoeren module
 De module is gericht om patiënt gegevens uit een gevulde Chipsoft HiX database in te laden naar een gekloonde Chipsoft HiX omgeving. Deze module richt zich *alleen* op patiënt gegevens en niet op het importeren van inrichtingen, rechten, etc.
