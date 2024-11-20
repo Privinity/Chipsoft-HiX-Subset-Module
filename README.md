@@ -12,4 +12,5 @@ a
 a
 
 ## Licentie
-a
+De GNU Affero General Public License Versie 3 (AGPL 3) is van toepassing op dit project.
+De inhoud van deze licentie is te vinden in de [license file](https://github.com/Privinity/Chipsoft-HiX-Subset-Module?tab=AGPL-3.0-1-ov-file#readme)
