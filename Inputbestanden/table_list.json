@@ -1,0 +1,1158 @@
+[
+    {
+        "table_name": "PATIENT_PATIENT",
+        "hix_module": "PATIENT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_OPTREG",
+        "hix_module": "PATIENT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_PATREL",
+        "hix_module": "PATIENT",
+        "key_column": "PATIENTNR1",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_AFSPRAAK",
+        "hix_module": "AGENDA",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_BEHANDELING",
+        "hix_module": "AGENDA",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_COMBINAT",
+        "hix_module": "AGENDA",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_VERWKAAR",
+        "hix_module": "AGENDA",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ALLERGIE_ALLERGIE",
+        "hix_module": "ALLERGIE",
+        "key_column": "PATIENT_NR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ALLERGIE_EXTALLER",
+        "hix_module": "ALLERGIE",
+        "key_column": "PATIENT_NR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOTHEEK_CONSULT",
+        "hix_module": "APOTHEEK",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ARCHIEF_AANVRLOG",
+        "hix_module": "ARCHIEF",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ARCHIEF_ARCHAANV",
+        "hix_module": "ARCHIEF",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ARCHIEF_ARCHDOSS",
+        "hix_module": "ARCHIEF",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "BACLAB_PA_OND",
+        "hix_module": "LAB",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LAB_BLOEDGRP",
+        "hix_module": "LAB",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LAB_BLOODTYPEHIST",
+        "hix_module": "LAB",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LAB_L_AANVRG",
+        "hix_module": "LAB",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATHO_PA_OND",
+        "hix_module": "LAB",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_DISPLAYREG",
+        "hix_module": "CONSULT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_REGISTRATION",
+        "hix_module": "CONSULT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_REGPART",
+        "hix_module": "CONSULT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_SEARCHIST",
+        "hix_module": "CONSULT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_EPDDIAG",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_GENDOSS",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_LIJSTOBJ",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_MULTIREG",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_NOTE",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_PATSDOSS",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_USROBJSTAT",
+        "hix_module": "DOSSIER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_BAXTERREG",
+        "hix_module": "LOGISTIEK",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_BAXTERRUN",
+        "hix_module": "LOGISTIEK",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_RECDEEL",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_EVENTS",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_FLDBALNC",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_FLDBNCVD",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_FLUIDIN",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_FLUIDOUT",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_MEETSESS",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_MEETVDAT",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_METINGEN",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_PATALRMSETT",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_SCCHKOVZ",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_SESSACTI",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_SESSINGM",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_SESSSTDB",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MULTIMED_MULTMDOC",
+        "hix_module": "MULTIMEDIA",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_OPNAME",
+        "hix_module": "OPNAME",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_CREDIT",
+        "hix_module": "OPNAME",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_OPNMACHT",
+        "hix_module": "OPNAME",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_ORDER",
+        "hix_module": "ORDER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_ACTIE",
+        "hix_module": "ORDER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_HERHALING",
+        "hix_module": "ORDER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERLAB_LABORDER",
+        "hix_module": "ORDER",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PREOP_SCREEN",
+        "hix_module": "PREOP",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "REFERRAL_REFERRAL",
+        "hix_module": "OVERIG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "RONTGEN_ROFACT",
+        "hix_module": "RADIOLOGIE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "RONTGEN_RONTAANV",
+        "hix_module": "RADIOLOGIE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "RONTGEN_RONTGEN",
+        "hix_module": "RADIOLOGIE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "SEH_SEHREG",
+        "hix_module": "SEH",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "STERIEL_REGISTRATIES",
+        "hix_module": "STERIEL",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "SUPERVISOR_ITEM",
+        "hix_module": "OVERIG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "UITSLAG_ONDERZOEK",
+        "hix_module": "UITSLAGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "UITSLAG7_PA_OND",
+        "hix_module": "UITSLAGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "UITSLAG8_PA_OND",
+        "hix_module": "UITSLAGEN",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "VPK_APMUTATIE",
+        "hix_module": "VERPLEEG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "VPK_NOTE",
+        "hix_module": "VERPLEEG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "VPK_PLAN",
+        "hix_module": "VERPLEEG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "VRLIJST_VROPSLG",
+        "hix_module": "DDR",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "WHATSNEW_POSTVKIN",
+        "hix_module": "WHATSNEW",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "WHATSNEW_WHATSNEW",
+        "hix_module": "WHATSNEW",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "WI_DOCUMENT",
+        "hix_module": "DOCUMENT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "WI_DOCASCII",
+        "hix_module": "DOCUMENT",
+        "key_column": "DOCID",
+        "key_column_class": "documentid",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_AFSPVERROPT",
+        "hix_module": "AGENDA",
+        "key_column": "AFSPRAAKNR",
+        "key_column_class": "afspraakid",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_DAGBEHANDEL",
+        "hix_module": "AGENDA",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_PLANRESULT",
+        "hix_module": "AGENDA",
+        "key_column": "AFSPRAAK",
+        "key_column_class": "afspraakid",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_WACHTLAFSP",
+        "hix_module": "AGENDA",
+        "key_column": "AFSPRAAKNR",
+        "key_column_class": "afspraakid",    
+        "enabled": true
+    },
+    {
+        "table_name": "AMBULANT_FAKTOVER",
+        "hix_module": "AMBULANT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOBER_BEROP",
+        "hix_module": "APOTHEEK",
+        "key_column": "PATNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "BACLAB_PA_VERR",
+        "hix_module": "MICROBIOLOGIE",
+        "key_column": "ONDERZNR",
+        "key_column_class": "mbid",    
+        "enabled": true
+    },
+    {
+        "table_name": "BALANCE_VALIDATION",
+        "hix_module": "OVERIG",
+        "key_column": "PatientId",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ECONSULT_ECONSULT",
+        "hix_module": "ECONSULT",
+        "key_column": "PATIENTID",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DBCAANOV",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DBCBATCH",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DBCMACHT",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISDDS",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISGM",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISOVP",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISPAT",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISPATKOP",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISST",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISVR",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_DISZT",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_EPISODE",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_TRIALDBC",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_VERRMACHT",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_VERRMAVR",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_WORKLISTBASE",
+        "hix_module": "EPISODE",
+        "key_column": "PATIENTID",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "FAKTUUR_EIV2RET",
+        "hix_module": "FAKTUUR",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "FAKTUUR_FAKTOVER",
+        "hix_module": "FAKTUUR",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "FAKTUUR_LOGDBCW",
+        "hix_module": "FAKTUUR",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "FAKTUUR_RECURACT",
+        "hix_module": "FAKTUUR",
+        "key_column": "PATIENTNUMBER",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "FAKTUUR_SPOOLNOT",
+        "hix_module": "FAKTUUR",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "GGZ_MIDMAAT",
+        "hix_module": "GGZ",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "GRPOHW_OHW",
+        "hix_module": "OVERIG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "KLINDATA_CLINDATMOM",
+        "hix_module": "OVERIG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "KLINDATA_EXTPATADREL",
+        "hix_module": "OVERIG",
+        "key_column": "PATCODE",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "KLINDATA_PATADREL",
+        "hix_module": "OVERIG",
+        "key_column": "PATCODE",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LAB_LUITSLAG",
+        "hix_module": "LAB",
+        "key_column": "AANVRAAGNR",
+        "key_column_class": "labid",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_ADMCHK",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_AMBUCHK",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVADMIT",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVAMBUL",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVDDS",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVMEDDIAG",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVMEDI",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVMEDVER",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVPAT",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVREOP",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVST",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVZP",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_DELIVZT",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "LBZ_VALERR",
+        "hix_module": "LBZ",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_WAARSMO",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_WAARSNT",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_RECEPT",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATCODE",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_MOACTLOG",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_ONDERDW",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_KUUR",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_KUURDEEL",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_GESCHRMO",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_DEELLST",
+        "hix_module": "MEDICATIE",
+        "key_column": "PATNUM",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_DEVPATUSAGE",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTID",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_PPDVC",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTID",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_STDBEH",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTID",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_VALUESET",
+        "hix_module": "METINGEN",
+        "key_column": "PATIENTID",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MULTIMED_MULTDRFT",
+        "hix_module": "MULTIMEDIA",
+        "key_column": "PatientId",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MULTIMED_DDRANNOTA",
+        "hix_module": "MULTIMEDIA",
+        "key_column": "PatientId",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "MULTIMED_BATCHDETAIL",
+        "hix_module": "MULTIMEDIA",
+        "key_column": "PatientId",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_ADRES",
+        "hix_module": "OPNAME",
+        "key_column": "PLANNR",
+        "key_column_class": "opnameplanid",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_OPNMUT",
+        "hix_module": "OPNAME",
+        "key_column": "PLANNR",
+        "key_column_class": "opnameplanid",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_OPNNOTFACT",
+        "hix_module": "OPNAME",
+        "key_column": "PLANNR",
+        "key_column_class": "opnameplanid",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_PLANONTSLA",
+        "hix_module": "OPNAME",
+        "key_column": "PLANNR",
+        "key_column_class": "opnameplanid",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_KLINPAT",
+        "hix_module": "OPNAME",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_ORARTSCC",
+        "hix_module": "ORDER",
+        "key_column": "ORDERNR",
+        "key_column_class": "orderid",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_ORDPLUG",
+        "hix_module": "ORDER",
+        "key_column": "ORDERNR",
+        "key_column_class": "orderid",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_TRANS",
+        "hix_module": "ORDER",
+        "key_column": "ORDERNR",
+        "key_column_class": "orderid",    
+        "enabled": true
+    },
+    {
+        "table_name": "OUTPUT_CORACTLOG",
+        "hix_module": "OVERIG",
+        "key_column": "PATIENT",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PACS_SRSTORAGE",
+        "hix_module": "PACS",
+        "key_column": "PATIENT",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PAG_PATADRES",
+        "hix_module": "OVERIG",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATHO_PA_VERR",
+        "hix_module": "PATHOLOGIE",
+        "key_column": "ONDERZNR",
+        "key_column_class": "pathoid",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_EXTDATALOG",
+        "hix_module": "PATIENT",
+        "key_column": "PatientNumber",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_MEDMELD",
+        "hix_module": "PATIENT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_MERGELOG",
+        "hix_module": "PATIENT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_NATIONAL",
+        "hix_module": "PATIENT",
+        "key_column": "PatientNumber",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_PATVERZ",
+        "hix_module": "PATIENT",
+        "key_column": "PATIENTNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_POLIS",
+        "hix_module": "PATIENT",
+        "key_column": "PATNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "VRLIJST_LSTOPSLG",
+        "hix_module": "DDR",
+        "key_column": "PATNR",
+        "key_column_class": "patientnr",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKINFO",
+        "hix_module": "OK",
+        "key_column": "OPERATIENR",
+        "key_column_class": "operatieid",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKVER",
+        "hix_module": "OK",
+        "key_column": "OPERATIENR",
+        "key_column_class": "operatieid",    
+        "enabled": true
+    },
+    {
+        "table_name": "RP_PLANOBJECT",
+        "hix_module": "OVERIG",
+        "key_column": "LINKEDOBJECTID",
+        "key_column_class": "afspraakid",    
+        "enabled": true
+    },
+    {
+        "table_name": "RP_PLANOBJECT",
+        "hix_module": "OVERIG",
+        "key_column": "LINKEDOBJECTID",
+        "key_column_class": "opnameplanid",    
+        "enabled": true
+    },
+    {
+        "table_name": "RP_PLANOBJECT",
+        "hix_module": "OVERIG",
+        "key_column": "LINKEDOBJECTID",
+        "key_column_class": "operatieid",    
+        "enabled": true
+    },
+    {
+        "table_name": "RP_PLANOBJECT",
+        "hix_module": "OVERIG",
+        "key_column": "LINKEDOBJECTID",
+        "key_column_class": "sehid",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSBLOB_PASBLOB",
+        "hix_module": "OVERIG",
+        "key_column": "CODE",
+        "key_column_class": "documentblobid",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSBLOB_PASBLOB",
+        "hix_module": "OVERIG",
+        "key_column": "CODE",
+        "key_column_class": "multimediablobid",    
+        "enabled": true
+    }
+       
+]
