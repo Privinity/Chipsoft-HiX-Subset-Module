@@ -1,5 +1,5 @@
 # Chipsoft HiX Subset Powershell Module
-De Chipsoft HiX Subset Module is een Powershell module welke het mogelijk maakt om een gekloonde Chipsoft HiX database te vullen met patiënt gegevens vanuit een - zelf te specificeren - Chipsoft HiX database. Zo kun je makkelijk en snel verkleinde Chipsoft HiX omgevingen aanmaken zonder dat je hiervoor vele terabytes aan ruimte per omgeving nodig hebt 🚀!
+De Chipsoft HiX Subset Module is een Powershell module welke het mogelijk maakt om een gekloonde Chipsoft HiX database te vullen met patiëntgegevens vanuit een - zelf te specificeren - Chipsoft HiX database. Zo kun je makkelijk en snel verkleinde Chipsoft HiX omgevingen aanmaken zonder dat je hiervoor vele terabytes aan ruimte per omgeving nodig hebt 🚀!
 
 ## Ondersteunde Chipsoft versies
 Op dit moment is de module ontwikkeld en getest op basis van **Chipsoft HiX 6.3**.
@@ -15,13 +15,13 @@ Naar alle waarschijnlijkheid functioneert de module ook op Chipsoft HiX 6.2 maar
 6. Vanaf nu kun je de module gebruiken. Een handig commando om snel een overzicht van de verschillende parameters, als ook voorbeelden te zien, is `Get-Help Start-SubsetHixDatabase -Detailed`.
 
 ## Benodigdheden voor uitvoeren module
-De module is gericht om patiënt gegevens uit een gevulde Chipsoft HiX database in te laden naar een gekloonde Chipsoft HiX omgeving. Deze module richt zich *alleen* op patiënt gegevens en niet op het importeren van inrichtingen, rechten, etc.
+De module is gericht om patiëntgegevens uit een gevulde Chipsoft HiX database in te laden naar een gekloonde Chipsoft HiX omgeving. Deze module richt zich *alleen* op patiëntgegevens en niet op het importeren van inrichtingen, rechten, etc.
 
 Om de inrichting, rechten, etc in een lege Chipsoft HiX database te laden, adviseren we je om gebruik te maken van de Chipsoft Clone Content tool. Deze tool wordt meegeleverd met de Database Updater software en de documentatie is op te vragen bij Chipsoft.
 
 De Chipsoft Clone Content tool vult een een lege database met alle inrichtingstabellen en is dus een ideale manier om een Chipsoft HiX omgeving aan te maken die technisch functioneert maar nog geen patiëntgegevens bevat.
 
-Nadat je de Chipsoft Clone Content tool en de Database Updater uitgevoert hebt om een nieuwe, lege, Chipsoft HiX omgeving aan te maken kun je vervolgens deze module gebruiken om deze lege omgeving te vullen met specifieke patiënt gegevens.
+Nadat je de Chipsoft Clone Content tool en de Database Updater uitgevoert hebt om een nieuwe, lege, Chipsoft HiX omgeving aan te maken kun je vervolgens deze module gebruiken om deze lege omgeving te vullen met specifieke patiëntgegevens.
 
 De module maakt gebruik van de SQL Server Bulk Copy functionaliteit. Om die reden moeten de SQL Server client tools geïnstalleerd zijn op de machine waarop de module uitgevoerd wordt. Normaal gesproken worden de benodigde binaries geïnstalleerd samen met SQL Server Management Studio.
 
@@ -60,7 +60,7 @@ Je kan zelf tabellen toevoegen en verwijderen in het table import bestand. Deze 
 ### Meer over de key_column en key_column_class elementen
 In veel Chipsoft HiX tabellen is het patiëntnummer het sleutelveld waarop gegevens geimporteerd worden richting de gekloonde database. In veel tabellen heet deze kolom **PATIENTNR** en dat is dus ook vaak de waarde van de **key_column** element in het table import bestand. Indien een patiëntnummer het sleutelveld van een tabel is dan hoort daar een **key_column_class** van **patientnr** bij. Door deze elementen zo te configuren weet de module dat deze gegevens in de brontabel moet selecteren op basis van patiëntnummers die gebruikt worden in de filter op de **PATIENTNR** kolom. 
 
-Niet alle tabellen in een Chipsoft HiX database hebben echter het patiëntnummer als sleutelveld. Een voorbeeld hiervan is de **WI_DOCASCII** tabel welke een platte tekst voorbeeld van een document bevat. Deze tabel heeft als sleutelveld een ID van een document. Om ook deze gegevens te kunnen importeren maken we gebruik van een andere **key_column** en **key_column_class** waarde zodat de module weet dat hier andere waarden dan het patiëntnummer gebruikt moeten worden om de gegevens te filteren. 
+Niet alle tabellen in een Chipsoft HiX database hebben echter het patiëntnummer als sleutelveld. Een voorbeeld hiervan is de **WI_DOCASCII** tabel welke een tekst voorbeeld van een document bevat. Deze tabel heeft als sleutelveld een ID van een document. Om ook deze gegevens te kunnen importeren maken we gebruik van een andere **key_column** en **key_column_class** waarde zodat de module weet dat hier andere waarden dan het patiëntnummer gebruikt moeten worden om de gegevens te filteren. 
 Het onderstaande voorbeeld is hoe de configuratie er voor de **WI_DOCASCII** eruit ziet in het table import bestand:
 
 ```
@@ -158,6 +158,9 @@ Kopieert de patientgegevens voor de gespecificeerde tabellen in het clone input 
 De Chipsoft HiX Subset Module is een opensource initatief wat we met veel zorg hebben geprobeerd te ontwikkelen en te testen. Toch kan er uiteraard een bug in de code sluipen of een functionaliteit ontbreken. Meld deze vooral aan via de **Issues** optie op deze GitHub pagina. We proberen dan zo snel mogelijk te reageren.
 
 Mocht je na het gebruik van de Chipsoft HiX Subset Module erachter komen dat er nog gegevens gebruiken en weten in welke tabellen deze te vinden zijn? Maak ook dan een issue aan en dan voegen we de tabellen toe aan de het tabel import bestand!
+
+## Over Privinity
+Bij Privinity helpen we organisaties om veilig te kunnen werken met privacygevoelige gegevens doormiddel van anonimiseren. Hierbij zorgen we ervoor dat je privacygevoelige gegevens bruikbaar blijven terwijl de privacy van de personen over wie de gegevens gaan optimaal beschermd blijven. Zo worden onze oplossingen ingezet om privacygevoelige gegevens in bijvoorbeeld test-, ontwikkel- en analysedatabronnen te beschermen of om veilig gegevens tussen organisaties uit te wisselen.
 
 ## Disclaimer
 De Chipsoft HiX Subset Module is een oplossing die ontwikkeld is om een antwoord de geven op de vraag vanuit ziekenhuizen om met een kleinere set van data meerdere Chipsoft HiX omgevingen te kunnen uitrollen en gebruiken voor ontwikkel- en testdoeleinden. De module is niet door Chipsoft ontwikkeld en draagt puur de naam Chipsoft en HiX om duidelijk aan te geven op welk product deze oplossing van toepassing is. 
