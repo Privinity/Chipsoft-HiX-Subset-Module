@@ -63,11 +63,8 @@
         Op het moment dat deze parameter op $true staat moeten ook de ImportPatientIds op
         $true gezet zijn en de PatientIdImportFile parameter gevuld zijn.
 
-    .PARAMETER BatchSize
-        Optionele paramater (standaard 10000) welke de grote van de kopie batch aangeeft.
-
     .PARAMETER Timeout
-        Optionele parameter (standaard 60) welke de timeout in seconden aangeeft van elke 
+        Optionele parameter (standaard 0, oftewel geen timeout) welke de timeout in seconden aangeeft van elke 
         batch van het kopieer commando. Indien de batch meer tijd dan de timeout in beslag neemt
         wordt deze automatisch afgebroken.
         Door de Timeout op 0 te zetten wordt er geen timeout gebruikt.
@@ -84,7 +81,7 @@
 
     .NOTES
         Author: E. van de Laar
-        Versie: 1.0 (19-11-2024)
+        Versie: 1.1 (15-05-2025)
         Website: https://www.privinity.com
         Copyright: (C) Privinity, info@privinity.com
         License: GNU AGPL v3 https://www.gnu.org/licenses/agpl-3.0.txt
@@ -143,9 +140,7 @@ function Start-SubsetHixDatabase {
         [Parameter(Mandatory=$false)]
         [bool]$OnlyUseImportedPatientIds = $false,
         [Parameter(Mandatory=$false)]
-        [int]$BatchSize = 10000,
-        [Parameter(Mandatory=$false)]
-        [int]$Timeout = 60,
+        [int]$Timeout = 0,
         [Parameter(Mandatory=$false)]
         [bool]$ContinueOnError = $false,
         [Parameter(Mandatory=$false)]
@@ -201,67 +196,76 @@ function Start-SubsetHixDatabase {
             Param
             (
                 [Parameter(Mandatory=$true)]
+                [string] $IdentifierCacheTable,
+                [Parameter(Mandatory=$true)]
                 [string] $SourceTable,
                 [Parameter(Mandatory=$true)]
                 [string] $IdentifierColumn,
                 [Parameter(Mandatory=$true)]
                 [string] $FilterColumn,
                 [Parameter(Mandatory=$true)]
-                [string] $FilterClause
+                [string] $FilterCacheTable
             )
 
             try {
-                            
-                $queryGetIdentifiers = "SELECT $IdentifierColumn FROM $SourceTable WHERE $FilterColumn IN ($FilterClause);"
-                $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryGetIdentifiers, $srcDbConnection)
-                $srcDbConnection.Open()
-    
-                $sqlAdapter = [System.Data.SqlClient.SqlDataAdapter]::new($sqlCommand)
-                $identifierTable = New-Object System.Data.DataTable
-    
-                $sqlAdapter.Fill($identifierTable) | Out-Null
-    
-                # Build the IN clause which we use to filter the data
-                [string]$identifierString = ""
-                foreach($identifier in $identifierTable)
-                {
-                    $identifierString += "'" + $identifier.$IdentifierColumn + "',"
-                }
-    
-                # Remove the last ,
-                $identifierString = $identifierString.TrimEnd(",")
 
-                return $identifierString
+                # Truncate the cache table for this specific identifier
+                $queryTruncateIdentifierCacheTable = "TRUNCATE TABLE $IdentifierCacheTable"
+                $cacheDbConnection.Open()
+                $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryTruncateIdentifierCacheTable, $cacheDbConnection)
+                $sqlCommand.ExecuteNonQuery() | Out-Null                        
+                $cacheDbConnection.Close()       
+                
+                $queryCacheIdentifiers = "SELECT $IdentifierColumn FROM $SourceTable WHERE $FilterColumn IN (SELECT ID FROM HixSubsetCache.dbo.$FilterCacheTable) AND $IdentifierColumn <> '';"
+
+                if($DebugMode -eq $true)
+                {
+                    LogMessage Debug "$queryCacheIdentifiers"
+                }
+
+                $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryCacheIdentifiers, $srcDbConnection)                
+                $srcDbConnection.Open()
+
+                [System.Data.SqlClient.SqlDataReader]$sqlReader = $sqlCommand.ExecuteReader()
+                
+                # Set bulk copy options
+                $sqlBulkCopy = New-Object -TypeName System.Data.SqlClient.SqlBulkCopy($cacheDbConnectionString, [System.Data.SqlClient.SqlBulkCopyOptions]::KeepIdentity)
+                $sqlBulkCopy.EnableStreaming = $true
+                $sqlBulkCopy.DestinationTableName = $IdentifierCacheTable
+                $sqlBulkCopy.BatchSize = $BatchSize 
+                $sqlBulkCopy.BulkCopyTimeout = $Timeout 
+                $sqlBulkCopy.ColumnMappings.Add($IdentifierColumn, "ID") > $null 
+                                
+                # Perform the bulk copy action
+                $sqlBulkCopy.WriteToServer($sqlReader)                                
+
+                return "success"
+
     
             }
             catch {
-                LogMessage Error "Er is een fout opgetreden bij het inladen van identifiers voor de $SourceTable tabel vanuit de brondatabase die gebruikt worden voor de data kopie"
+                LogMessage Error "Er is een fout opgetreden bij het inladen van identifiers voor de $SourceTable tabel vanuit de brondatabase die gebruikt worden voor de data kopie" -exceptionMessage $_.Exception.Message 
                 return "error"
             }
             finally {
                 # Close the connection
+                $cacheDbConnection.Close()
                 $srcDbConnection.Close()
             }
 
         }
 
-        # Define the CopyHixTable function
-        function CopyHixTable
+        # Define the CopyFullHixTable function
+        function CopyFullHixTable
         {
 
             Param
             (
 
                 [Parameter(Mandatory=$true)]
-                [string] $TableName,
-                [Parameter(Mandatory=$true)]
-                [string] $KeyColumn,
-                [Parameter(Mandatory=$true)]
-                [string] $Ids,
+                [string] $TableName,                
                 [Parameter(Mandatory=$false)]
-                [bool] $BatchSize = 10000,
-                [Parameter(Mandatory=$false)]
-                [bool] $Timeout = 60,
+                [bool] $Timeout = 0,
                 [Parameter(Mandatory=$false)]
                 [bool]$ContinueOnError = $false,
                 [Parameter(Mandatory=$false)]
@@ -271,14 +275,14 @@ function Start-SubsetHixDatabase {
 
             try {
 
-                LogMessage Info "|- Start met kopieren patientdata vanuit $TableName "
+                LogMessage Info "|- Start met kopieren volledige tabel $TableName "
 
                 if ($PSCmdlet.ShouldProcess($TableName, "Executing bulk copy")) {                 
 
                     $timer = [System.Diagnostics.Stopwatch]::StartNew()                
 
                     # In some cases not all columns of a table are present on the cloned target database.
-                    # For that reason we get the column names of the table in the *target database* instead of the source database.
+                    # For that reason we get the column names of the table in the *target database*.
                     # This way we do not get errors because of invalid column mappings
                     $queryGetTableColumns = "SELECT TOP 0 * FROM $TableName ;"
                     $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryGetTableColumns, $targetDbConnection)
@@ -290,36 +294,54 @@ function Start-SubsetHixDatabase {
                     $sqlAdapter.Fill($columnTable) | Out-Null
                 
                     $srcDbConnection.Close()                   
-                
-                    # Perform the bulk copy using the column mapping and ID's we retrieved earlier        
-                    $queryGetRecords = "SELECT * FROM $TableName WHERE $KeyColumn IN ($Ids);"
+                                                       
+                    # Build the column selection string
+                    $columnMappingString = ""
+
+                    foreach ($column in $columnTable.Columns) 
+                    { 
+
+                        $columnMappingString = $columnMappingString + '[' + $column + '],'
+                    }
+
+                    # Remove the last ,
+                    $columnMappingString = $columnMappingString.Substring(0, $columnMappingString.Length - 1)
+
+                    # Check if the target table has an IDENTITY column
+                    # If this is true we need to set IDENTITY_INSERT ON before the INSERT and OFF again when completed
+                    $checkIdentityTable = "SELECT COUNT(*) AS 'IdentityEnabled' FROM sys.identity_columns WHERE [object_id] = OBJECT_ID('$TableName')"
+                    $targetDbConnection.Open()
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($checkIdentityTable, $targetDbConnection)
+                    $identityPresent = $sqlCommand.ExecuteScalar();
+                    $targetDbConnection.Close() 
+                    
+                    # Perform the copy command
+                    if($identityPresent -eq 0)
+                    {
+                        $copyFullTableQuery = "INSERT INTO $TargetDatabase.dbo.$TableName ($columnMappingString) SELECT $columnMappingString FROM $SourceDatabase.dbo.$TableName ;"
+                    }
+                    else 
+                    {
+                        $copyFullTableQuery = "SET IDENTITY_INSERT $TargetDatabase.dbo.$TableName ON; INSERT INTO $TargetDatabase.dbo.$TableName ($columnMappingString) SELECT $columnMappingString FROM $SourceDatabase.dbo.$TableName ; SET IDENTITY_INSERT $TargetDatabase.dbo.$TableName OFF;"    
+                    }
                     
                     if($DebugMode -eq $true)
                     {
-                        LogMessage Debug "$queryGetRecords"
-                    }
-
-                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryGetRecords, $srcDbConnection)
-                    $srcDbConnection.Open()
-                
-                    [System.Data.SqlClient.SqlDataReader]$sqlReader = $sqlCommand.ExecuteReader()
-                
-                    # Set bulk copy options
-                    $sqlBulkCopy = New-Object -TypeName System.Data.SqlClient.SqlBulkCopy($targetDbConnectionString, [System.Data.SqlClient.SqlBulkCopyOptions]::KeepIdentity)
-                    $sqlBulkCopy.EnableStreaming = $true
-                    $sqlBulkCopy.DestinationTableName = $TableName
-                    $sqlBulkCopy.BatchSize = $BatchSize 
-                    $sqlBulkCopy.BulkCopyTimeout = $Timeout 
-                    
-                    # Map the column names of the source to the target
-                    foreach ($column in $columnTable.Columns) 
-                    { 
-                        $sqlBulkCopy.ColumnMappings.Add($column, $column) > $null 
+                        LogMessage Debug "$copyFullTableQuery"
                     }
                     
-                    # Perform the bulk copy action
-                    $sqlBulkCopy.WriteToServer($sqlReader)
-                    $rowsCopied = [System.Data.SqlClient.SqlBulkCopyExtension]::RowsCopiedCount($sqlBulkCopy)
+                    $targetDbConnection.Open()
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($copyFullTableQuery, $targetDbConnection)
+                    $sqlCommand.CommandTimeout = $Timeout
+                    $sqlCommand.ExecuteNonQuery() | Out-Null                        
+                    $targetDbConnection.Close() 
+                   
+                    # Get the number of rows inserted
+                    $insertedRowCount = "SELECT COUNT(*) FROM $TargetDatabase.dbo.$TableName"
+                    $targetDbConnection.Open()
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($insertedRowCount, $targetDbConnection)
+                    $rowsCopied = $sqlCommand.ExecuteScalar();
+                    $targetDbConnection.Close() 
                 
                     LogMessage Success "|- Doel tabel $TableName gevuld! Verwerkt aantal rijen: $rowsCopied, in $([math]::Round($timer.Elapsed.TotalSeconds,0)) seconden."
 
@@ -337,12 +359,6 @@ function Start-SubsetHixDatabase {
             }
             finally {
             
-                # Close the connections
-                $sqlReader.Close()
-                $srcDbConnection.Close()
-                $sqlBulkCopy.Close()
-                $sqlBulkCopy.Dispose()
-
                 # Stop the timer
                 $timer.Stop()
             
@@ -350,25 +366,117 @@ function Start-SubsetHixDatabase {
 
         }
 
-        # Modify the SqlBulkCopy with an extension so we can get the number of rows processed
-        # See http://stackoverflow.com/questions/1188384/sqlbulkcopy-row-count-when-complete
-        $sourcecode = 'namespace System.Data.SqlClient {
-            using Reflection;
+        # Define the CopyHixTable function
+        function CopyHixTable
+        {
 
-            public static class SqlBulkCopyExtension
-            {
-                const String _rowsCopiedFieldName = "_rowsCopied";
-                static FieldInfo _rowsCopiedField = null;
+            Param
+            (
 
-                public static int RowsCopiedCount(this SqlBulkCopy bulkCopy)
-                {
-                    if (_rowsCopiedField == null) _rowsCopiedField = typeof(SqlBulkCopy).GetField(_rowsCopiedFieldName, BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
-                    return (int)_rowsCopiedField.GetValue(bulkCopy);
+                [Parameter(Mandatory=$true)]
+                [string] $TableName,
+                [Parameter(Mandatory=$true)]
+                [string] $KeyColumn,
+                [Parameter(Mandatory=$true)]
+                [string] $IdCacheTable,
+                [Parameter(Mandatory=$false)]
+                [bool] $Timeout = 0,
+                [Parameter(Mandatory=$false)]
+                [bool]$ContinueOnError = $false,
+                [Parameter(Mandatory=$false)]
+                [bool]$DebugMode = $false
+
+            )
+
+            try {
+
+                LogMessage Info "|- Start met kopieren patientdata vanuit $TableName "
+
+                if ($PSCmdlet.ShouldProcess($TableName, "Executing bulk copy")) {                 
+
+                    $timer = [System.Diagnostics.Stopwatch]::StartNew()       
+                    
+                    # In some cases not all columns of a table are present on the cloned target database.
+                    # For that reason we get the column names of the table in the *target database*.
+                    # This way we do not get errors because of invalid column mappings
+                    $queryGetTableColumns = "SELECT TOP 0 * FROM $TableName ;"
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryGetTableColumns, $targetDbConnection)
+                    $srcDbConnection.Open()                
+                    $sqlAdapter = [System.Data.SqlClient.SqlDataAdapter]::new($sqlCommand)
+                    $columnTable = New-Object System.Data.DataTable                
+                    $sqlAdapter.Fill($columnTable) | Out-Null                
+                    $srcDbConnection.Close()                   
+                                                       
+                    # Build the column selection string
+                    $columnMappingString = ""
+
+                    foreach ($column in $columnTable.Columns) 
+                    { 
+                        $columnMappingString = $columnMappingString + '[' + $column + '],'
+                    }
+
+                    # Remove the last ,
+                    $columnMappingString = $columnMappingString.Substring(0, $columnMappingString.Length - 1) 
+                    
+                     # Check if the target table has an IDENTITY column
+                    # If this is true we need to set IDENTITY_INSERT ON before the INSERT and OFF again when completed
+                    $checkIdentityTable = "SELECT COUNT(*) AS 'IdentityEnabled' FROM sys.identity_columns WHERE [object_id] = OBJECT_ID('$TableName')"
+                    $targetDbConnection.Open()
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($checkIdentityTable, $targetDbConnection)
+                    $identityPresent = $sqlCommand.ExecuteScalar();
+                    $targetDbConnection.Close()                 
+
+                    # Perform the copy command
+                    if($identityPresent -eq 0)
+                    {
+                        $copyHixTableQuery = "INSERT INTO $TargetDatabase.dbo.$TableName ($columnMappingString) SELECT $columnMappingString FROM $SourceDatabase.dbo.$TableName WHERE $KeyColumn IN (SELECT ID FROM HixSubsetCache.dbo.$IdCacheTable);"
+                    }
+                    else 
+                    {
+                        $copyHixTableQuery = "SET IDENTITY_INSERT $TargetDatabase.dbo.$TableName ON; INSERT INTO $TargetDatabase.dbo.$TableName ($columnMappingString) SELECT $columnMappingString FROM $SourceDatabase.dbo.$TableName WHERE $KeyColumn IN (SELECT ID FROM HixSubsetCache.dbo.$IdCacheTable); SET IDENTITY_INSERT $TargetDatabase.dbo.$TableName OFF;"
+                    }                                                            
+
+                    if($DebugMode -eq $true)
+                    {
+                        LogMessage Debug "$copyHixTableQuery"
+                    }
+                    
+                    $targetDbConnection.Open()                                                   
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($copyHixTableQuery, $targetDbConnection)
+                    $sqlCommand.CommandTimeout = $Timeout
+                    $sqlCommand.ExecuteNonQuery() | Out-Null                        
+                    $targetDbConnection.Close() 
+
+                    # Get the number of rows inserted
+                    $insertedRowCount = "SELECT COUNT(*) FROM $TargetDatabase.dbo.$TableName"
+                    $targetDbConnection.Open()
+                    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($insertedRowCount, $targetDbConnection)
+                    $sqlCommand.CommandTimeout = $Timeout
+                    $rowsCopied = $sqlCommand.ExecuteScalar();
+                    $targetDbConnection.Close() 
+                
+                    LogMessage Success "|- Doel tabel $TableName gevuld! Verwerkt aantal rijen: $rowsCopied, in $([math]::Round($timer.Elapsed.TotalSeconds,0)) seconden."
+
                 }
+                
+                return $true                
+                
             }
-        }'
-        Add-Type -ReferencedAssemblies System.Data.dll -TypeDefinition $sourcecode -ErrorAction SilentlyContinue
+            catch {                
 
+                LogMessage Error "|- Er is een fout opgetreden tijdens het vullen van de tabel $TableName" -exceptionMessage $_.Exception.Message                    
+
+                return $false          
+                
+            }
+            finally {        
+
+                # Stop the timer
+                $timer.Stop()
+            
+            }
+
+        }        
     }
 
     process {
@@ -461,6 +569,34 @@ function Start-SubsetHixDatabase {
             $targetDbConnection.Close()
         }
 
+        # Test the connection to the subset cache database
+        try {
+
+            LogMessage Info "Subset Cache database connectie validatie gestart"
+                        
+            $cacheDbConnectionString = "Data Source=$SourceSqlInstance;Integrated Security=SSPI;Initial Catalog=HixSubsetCache;"
+            $cacheDbConnection = New-Object -TypeName System.Data.SqlClient.SqlConnection $cacheDbConnectionString
+
+            if ($PSCmdlet.ShouldProcess($cacheDbConnectionString, "Checking connection to subset cache database")) {
+            
+                # Open the connection to the source
+                $cacheDbConnection.Open()
+
+            }
+
+            LogMessage Success "Succesvol verbonden met de subset cache database HixSubsetCache op $SourceSqlInstance"
+
+        }
+        catch {
+            LogMessage Error "Er is een fout opgetreden tijdens het verbinden naar de subset cache database" -exceptionMessage $_.Exception.Message
+            break
+        }
+        finally {
+            # Close the connection
+            $cacheDbConnection.Close()
+        }
+
+
 
         # Import the table_list.json file that contains the tables we are going to process
         LogMessage Info "Laad het clone input bestand"
@@ -533,7 +669,24 @@ function Start-SubsetHixDatabase {
 
         # Define our datatable to hold our patient id's
         $patientIdTable = New-Object System.Data.DataTable
-        $patientIdTable.Columns.Add("PATIENTNR") | Out-Null
+        $idColumn = New-Object System.Data.DataColumn "PATIENTNR",([string])
+        $patientIdTable.Columns.Add($idColumn) | Out-Null
+
+        try {
+
+            # Truncate the subsetPatientIds table
+            $queryTruncatePatIdentifierCache = "TRUNCATE TABLE subsetPatientIds"
+            $cacheDbConnection.Open()
+            $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryTruncatePatIdentifierCache, $cacheDbConnection)
+            $sqlCommand.ExecuteNonQuery() | Out-Null                        
+            $cacheDbConnection.Close()
+            
+        }
+        catch {
+            LogMessage Error "Er is een fout opgetreden bij het opschonen van de patientID cache tabel" -exceptionMessage $_.Exception.Message
+            break
+        }
+        
 
         # If OnlyUseImportedPatientIds is set to $false it means we have to grab patient id's from the
         # database itself using the parameters supplied
@@ -581,13 +734,13 @@ function Start-SubsetHixDatabase {
 
                 if ($PSCmdlet.ShouldProcess($PatientIdImportFile, "Loading patientId import file")) {
 
-                    $importPatients = Get-Content $PatientIdImportFile
+                    $importPatients = Get-Content $PatientIdImportFile                    
 
                     foreach($patientImportId in $importPatients)
                     {
                         $patientRow = $patientIdTable.NewRow()
                         $patientRow["PATIENTNR"] = $patientImportId
-                        $patientIdTable.Rows.Add($patientRow)
+                        $patientIdTable.Rows.Add($patientRow)                        
                     }
 
                     LogMessage Success "PatientId import bestand ($PatientIdImportFile) succesvol geimporteerd!"
@@ -602,17 +755,21 @@ function Start-SubsetHixDatabase {
 
         }
 
-        # Step 1c: Build the IN clause which we use to filter the data we are copying   
+        # Step 1c: Write the patientId's to a table in the subset cache database  
         try {
-
-            [string]$patientIdString = ""
+            
             foreach($patientId in $patientIdTable)
-            {                
-                $patientIdString += "'" + $patientId.PATIENTNR + "',"
-            }            
+            {      
 
-            # Remove the last ,
-            $patientIdString = $patientIdString.TrimEnd(",")
+                $patientIdValue = $patientId.PATIENTNR                
+
+                $queryCachePatientId = "INSERT INTO subsetPatientIds (ID) VALUES ($patientIdValue)"
+
+                $cacheDbConnection.Open()
+                $sqlCommand = New-Object System.Data.SqlClient.SqlCommand($queryCachePatientId, $cacheDbConnection)
+                $sqlCommand.ExecuteNonQuery() | Out-Null                        
+                $cacheDbConnection.Close()                
+            }            
 
         }
         catch { 
@@ -629,7 +786,7 @@ function Start-SubsetHixDatabase {
         # a. DocumentIds
         if ($PSCmdlet.ShouldProcess("Document IDs", "Loading secondary identifiers")) {
             
-            $documentIdString = LoadIdentifiers -SourceTable "WI_DOCUMENT" -IdentifierColumn "ID" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $documentIdString = LoadIdentifiers -IdentifierCacheTable "subsetDocumentIds" -SourceTable "WI_DOCUMENT" -IdentifierColumn "ID" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($documentIdString -eq "error")
             {
@@ -640,7 +797,7 @@ function Start-SubsetHixDatabase {
         # b. AfspraakIds
         if ($PSCmdlet.ShouldProcess("Appointment IDs", "Loading secondary identifiers")) {
 
-            $afspraakIdString = LoadIdentifiers -SourceTable "AGENDA_AFSPRAAK" -IdentifierColumn "AFSPRAAKNR" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $afspraakIdString = LoadIdentifiers -IdentifierCacheTable "subsetAfspraakIds" -SourceTable "AGENDA_AFSPRAAK" -IdentifierColumn "AFSPRAAKNR" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($afspraakIdString -eq "error")
             {
@@ -652,7 +809,7 @@ function Start-SubsetHixDatabase {
         # c. MicrobiologieIds
         if ($PSCmdlet.ShouldProcess("Microbiology IDs", "Loading secondary identifiers")) {
 
-            $mbIdString = LoadIdentifiers -SourceTable "BACLAB_PA_OND" -IdentifierColumn "ONDERZNR" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $mbIdString = LoadIdentifiers -IdentifierCacheTable "subsetMmbIds" -SourceTable "BACLAB_PA_OND" -IdentifierColumn "ONDERZNR" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($mbIdString -eq "error")
             {
@@ -664,7 +821,7 @@ function Start-SubsetHixDatabase {
         # d. LabIds
         if ($PSCmdlet.ShouldProcess("Lab IDs", "Loading secondary identifiers")) {
 
-            $labIdString = LoadIdentifiers -SourceTable "LAB_L_AANVRG" -IdentifierColumn "AANVRAAGNR" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $labIdString = LoadIdentifiers -IdentifierCacheTable "subsetLabIds" -SourceTable "LAB_L_AANVRG" -IdentifierColumn "AANVRAAGNR" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($labIdString -eq "error")
             {
@@ -676,7 +833,7 @@ function Start-SubsetHixDatabase {
         # e. DocumentBlobIds
         if ($PSCmdlet.ShouldProcess("Document BLOB IDs", "Loading secondary identifiers")) {
 
-            $documentBlobIdString = LoadIdentifiers -SourceTable "WI_DOCUMENT" -IdentifierColumn "BLOBID" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $documentBlobIdString = LoadIdentifiers -IdentifierCacheTable "subsetDocBlobIds" -SourceTable "WI_DOCUMENT" -IdentifierColumn "BLOBID" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($documentBlobIdString -eq "error")
             {
@@ -688,7 +845,7 @@ function Start-SubsetHixDatabase {
         # f. MultimediaBlobIds
         if ($PSCmdlet.ShouldProcess("Multimedia BLOB IDs", "Loading secondary identifiers")) {
 
-            $multimediaBlobIdString = LoadIdentifiers -SourceTable "MULTIMED_MULTMDOC" -IdentifierColumn "BLOBID" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $multimediaBlobIdString = LoadIdentifiers -IdentifierCacheTable "subsetMMBlobIds" -SourceTable "MULTIMED_MULTMDOC" -IdentifierColumn "BLOBID" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($multimediaBlobIdString -eq "error")
             {
@@ -700,7 +857,7 @@ function Start-SubsetHixDatabase {
         # g. OpnamePlanIds
         if ($PSCmdlet.ShouldProcess("Admission IDs", "Loading secondary identifiers")) {
 
-            $opnamePlanIdString = LoadIdentifiers -SourceTable "OPNAME_OPNAME" -IdentifierColumn "PLANNR" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $opnamePlanIdString = LoadIdentifiers -IdentifierCacheTable "subsetOpnameIds" -SourceTable "OPNAME_OPNAME" -IdentifierColumn "PLANNR" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($opnamePlanIdString -eq "error")
             {
@@ -712,7 +869,7 @@ function Start-SubsetHixDatabase {
         # h. OrderIds
         if ($PSCmdlet.ShouldProcess("Order IDs", "Loading secondary identifiers")) {
 
-            $orderIdString = LoadIdentifiers -SourceTable "ORDERCOM_ORDER" -IdentifierColumn "ORDERNR" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $orderIdString = LoadIdentifiers -IdentifierCacheTable "subsetOrderIds" -SourceTable "ORDERCOM_ORDER" -IdentifierColumn "ORDERNR" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($orderIdString -eq "error")
             {
@@ -724,7 +881,7 @@ function Start-SubsetHixDatabase {
         # i. PathologieIds
         if ($PSCmdlet.ShouldProcess("Pathology IDs", "Loading secondary identifiers")) {
 
-            $pathoIdString = LoadIdentifiers -SourceTable "PATHO_PA_OND" -IdentifierColumn "ONDERZNR" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $pathoIdString = LoadIdentifiers -IdentifierCacheTable "subsetPathoIds" -SourceTable "PATHO_PA_OND" -IdentifierColumn "ONDERZNR" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($pathoIdString -eq "error")
             {
@@ -736,7 +893,7 @@ function Start-SubsetHixDatabase {
         # j. OperatieIds
         if ($PSCmdlet.ShouldProcess("Operation IDs", "Loading secondary identifiers")) {
 
-            $operatieIdString = LoadIdentifiers -SourceTable "OK_OKINFO" -IdentifierColumn "OPERATIENR" -FilterColumn "OPNAMENR" -FilterClause $opnamePlanIdString
+            $operatieIdString = LoadIdentifiers -IdentifierCacheTable "subsetOkIds" -SourceTable "OK_OKINFO" -IdentifierColumn "OPERATIENR" -FilterColumn "OPNAMENR" -FilterCacheTable "subsetOpnameIds"
 
             if($operatieIdString -eq "error")
             {
@@ -746,9 +903,9 @@ function Start-SubsetHixDatabase {
         }  
 
         # k. SehIds
-        if ($PSCmdlet.ShouldProcess("Operation IDs", "Loading secondary identifiers")) {
+        if ($PSCmdlet.ShouldProcess("SEH IDs", "Loading secondary identifiers")) {
 
-            $sehIdString = LoadIdentifiers -SourceTable "SEH_SEHREG" -IdentifierColumn "SEHID" -FilterColumn "PATIENTNR" -FilterClause $patientIdString
+            $sehIdString = LoadIdentifiers -IdentifierCacheTable "subsetSehIds" -SourceTable "SEH_SEHREG" -IdentifierColumn "SEHID" -FilterColumn "PATIENTNR" -FilterCacheTable "subsetPatientIds"
 
             if($sehIdString -eq "error")
             {
@@ -793,7 +950,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $patientIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode                                
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetPatientIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode                                
                     }
                     
                 }
@@ -808,7 +965,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $documentIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetDocumentIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -822,7 +979,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $afspraakIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetAfspraakIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -836,7 +993,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $mbIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetMmbIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -850,7 +1007,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $pathoIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetPathoIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -864,7 +1021,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $labIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetLabIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -878,7 +1035,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $documentBlobIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetDocBlobIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -892,7 +1049,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $multimediaBlobIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetMMBlobIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -906,7 +1063,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $opnamePlanIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetOpnameIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }
 
@@ -920,7 +1077,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $orderIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetOrderIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }    
                 
@@ -934,7 +1091,7 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $operatieIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetOkIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode            
                     }
                 }  
                 
@@ -948,15 +1105,24 @@ function Start-SubsetHixDatabase {
                     }
                     else 
                     {
-                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -Ids $sehIdString -BatchSize $BatchSize -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode                
+                        $copySuccess = CopyHixTable -TableName $tableName -KeyColumn $tableKeyColumn -IdCacheTable "subsetSehIds" -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode                
                     }
                     
                 }  
+
+                "fulltable"
+                {                   
+                    # Load the tables that need to be copied in their entirety 
+                    $copySuccess = CopyFullHixTable -TableName $tableName -Timeout $Timeout -ContinueOnError $ContinueOnError -DebugMode $DebugMode                
+                }
 
                 Default {}
                 
 
             }
+
+            # Wait for a second to avoid timeouts
+            Start-Sleep -Seconds 1
 
             # If we run into an error during the copy add the error to the errorCounter
             if($copySuccess -eq $false) 

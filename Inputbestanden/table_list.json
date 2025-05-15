@@ -1153,6 +1153,859 @@
         "key_column": "CODE",
         "key_column_class": "multimediablobid",    
         "enabled": true
+    },
+    {
+        "table_name": "AGENDA_AGCDM",
+        "hix_module": "AGENDA",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_AGENDM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_AGGROEP",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_AGLOM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_BEPALING",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_BHAANVITEM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_BLOCKPATTERN",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_DAGBAFSPCODE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_DAGBWACHTL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_GROEPMAP",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_POSLOCK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_RASTER",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_SUBAGENPROD",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AGENDA_WACHTCOMBI",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AMBULANT_SYSVARS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "AMBULANT_VERRASS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOBER_BEROP_BEROP",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOBER_BEROPDC",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOBER_BEROPSPC",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOBER_TASKDATA",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOTHEEK_CONSKBRON",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOTHEEK_CONTRINF",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "APOTHEEK_TAAK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CODELYST_DTSPLINK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "COMEZ_ACTION",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "COMEZ_DEPMUT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "COMEZ_EVENTS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "COMEZ_KOPCODES",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "COMEZ_ROOTING",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_DDRLINK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_INITPARAMREG",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_REGCONTEXT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_REGSPECLINK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CONSULT_SETERR",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGADR",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGARTS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGCOMM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGERK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGIERK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGIKWA",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGIREL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGKWAL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGPRAK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "CSZISLIB_RPLGRREL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "DCR_SUBLINK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_DOSSPRBLM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_LIJSTGEB",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_SPECNOTELINK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "DOSSIER_WSCOFA",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "EPISODE_AFSLZORG",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "EXPIRED_REASON",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "FUNCTIE_PROTOBJAANV",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "FUNCTIE_PROTOBJPROT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "FUNCTIE_PROTOCOLOBJ",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "FUNCTIE_REQUESTCOMBI",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_ARTMUT_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_BSNUMMER",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_FMDCLIENT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_FMDCOITEMRSN",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_FMDITEM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_FMDMESSAGE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_GEVAARCATKOP",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_IFAKKOP_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_INVOICEVAT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_ITEMREPLLOC",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_ITREPHOUWA",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_ONTVKOP_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_OPDRKOP_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_PICKLST_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_RETLEVKP_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_UITGKOP_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_VFACKOP_TABEL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "LOGISTK_WAARSCH",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MDC_DEF_PARTICIPANT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_BELEID",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_DOSPARAM",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_GUIDDOSI",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_KUURMORL",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_MEASURE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "MEDICAT_PATDEF",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_MEETSJAB",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "METINGEN_SESSSJAR",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "NAW_NAW",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_DAGMLDNG",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_LOGSESS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_LOGSESSU",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKACC",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKANACOMBITECH",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKANAEST",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKANAGCOMBITECH",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKANAVCOMBITECH",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKANNULE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKART",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKASSIST",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKCLUSTR",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKPERS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKPOWI",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKROUTE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "OK_OKSTER",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_OKVERTR",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_PAUZE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "OK_RSTPERS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_SENDTOEXTPARTY",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OK_VEILINGINTEK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "OPNAME_BEHCODEAHC",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_OPNBLOKBED",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "OPNAME_OPNMEDEB",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "ORDERCOM_FLOWVARI",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_NOTITIE",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_ONTVANGER",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "ORDERCOM_STORDLNK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERCOM_SUBORDFAV",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "ORDERLAB_LABORDERINH",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "ORDERLAB_LAINHOUD",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_PATLINK",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_PATTMP",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "PATIENT_PATVLGNR",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "PATIENT_TRANSPAT",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    },
+    {
+        "table_name": "SEH_BEDSTATUS",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "VPK_DOELREG",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "VPK_INTREG",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
+    }, 
+    {
+        "table_name": "WHATSNEW_AUTOREPLY",
+        "hix_module": "",
+        "key_column": "",
+        "key_column_class": "fulltable",    
+        "enabled": true
     }
-       
 ]

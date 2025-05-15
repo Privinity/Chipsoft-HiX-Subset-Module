@@ -5,29 +5,40 @@ De Chipsoft HiX Subset Module is een Powershell module welke het mogelijk maakt 
 Op dit moment is de module ontwikkeld en getest op basis van **Chipsoft HiX 6.3**.
 Naar alle waarschijnlijkheid functioneert de module ook op Chipsoft HiX 6.2 maar dit is nog niet getest.
 
+## Nieuw in versie 1.1
+
+> [!IMPORTANT]
+> In de nieuwe release van de Chipsoft HiX Subset Module zijn er een aantal aanpassingen doorgevoerd in hoe 
+patiëntdata tussen de bron omgeving en de verkleinde (gekloonde) database ingeladen wordt. Deze aanpassingen zijn gedaan om de performance van het inladen te verbeteren.
+Vanwege deze aanpassingen zijn er echter een aantal aanvullende eisen voor deze module:
+>
+> * De bron database waaruit de patiënt data geladen wordt moet zich binnen dezelfde SQL Server Instance bevinden als de verkleinde (gekloonde) database.
+> * Er moet een extra database (HixSubsetCache) aangemaakt worden waarin identifiers gecached worden voor het gebruikt van het inladen.
+
 ## Installatie
 
-1. Start een nieuwe Powershell sessie / terminal.
-2. Identificeer de Powershell Module locatie door het volgende commando uit te voeren: `$Env:PSModulePath`.
-3. Download en kopieer de gehele **SubsetHixDatabase** map naar een van deze locaties. Indien je wilt dat alle gebruikers op de machine de module kunnen gebruiken gebruik dan het pad **C:\Program Files\WindowsPowerShell\Modules** (Windows) of **/usr/local/microsoft/powershell/7/Modules** (Linux/Mac).
-4. Download de **table_list.json** en **patientIds.txt** bestanden en pas deze eventueel aan naar je eigen voorkeuren. 
-5. Importeer de module via het commando `Import-module -Name SubsetHixDatabase`.
-6. Vanaf nu kun je de module gebruiken. Een handig commando om snel een overzicht van de verschillende parameters, als ook voorbeelden te zien, is `Get-Help Start-SubsetHixDatabase -Detailed`.
+1. Maak een nieuwe SQL Server database aan binnen dezelfde SQL Server Instance als de bron en doel database. Gebruik hiervoor het **HiXSubsetCacheDB_Creation.sql** script die in de **HixSubsetCache Database** map staat.
+2. Start een nieuwe Powershell sessie / terminal.
+3. Identificeer de Powershell Module locatie door het volgende commando uit te voeren: `$Env:PSModulePath`.
+4. Download en kopieer de gehele **SubsetHixDatabase** map naar een van deze locaties. Indien je wilt dat alle gebruikers op de machine de module kunnen gebruiken gebruik dan het pad **C:\Program Files\WindowsPowerShell\Modules** (Windows) of **/usr/local/microsoft/powershell/7/Modules** (Linux/Mac).
+5. Download de **table_list.json** en **patientIds.txt** bestanden en pas deze eventueel aan naar je eigen voorkeuren. 
+6. Importeer de module via het commando `Import-module -Name SubsetHixDatabase`.
+7. Vanaf nu kun je de module gebruiken. Een handig commando om snel een overzicht van de verschillende parameters, als ook voorbeelden te zien, is `Get-Help Start-SubsetHixDatabase -Detailed`.
 
 ## Benodigdheden voor uitvoeren module
-De module is gericht om patiëntgegevens uit een gevulde Chipsoft HiX database in te laden naar een gekloonde Chipsoft HiX omgeving. Deze module richt zich *alleen* op patiëntgegevens en niet op het importeren van inrichtingen, rechten, etc.
+De module is gericht om patiëntgegevens uit een gevulde Chipsoft HiX database in te laden naar een gekloonde Chipsoft HiX omgeving. Deze module richt zich *alleen* op patiëntgegevens en niet op het importeren van inrichtingen, rechten, etc. met uitzondering van inrichtingstabellen die ziekenhuis specifiek zijn en/of niet door de Chipsoft Clone Content tool meegenomen worden.
 
 Om de inrichting, rechten, etc in een lege Chipsoft HiX database te laden, adviseren we je om gebruik te maken van de Chipsoft Clone Content tool. Deze tool wordt meegeleverd met de Database Updater software en de documentatie is op te vragen bij Chipsoft.
 
-De Chipsoft Clone Content tool vult een een lege database met alle inrichtingstabellen en is dus een ideale manier om een Chipsoft HiX omgeving aan te maken die technisch functioneert maar nog geen patiëntgegevens bevat.
+De Chipsoft Clone Content tool vult een lege database met alle inrichtingstabellen en is dus een ideale manier om een Chipsoft HiX omgeving aan te maken die technisch functioneert maar nog geen patiëntgegevens bevat.
 
 Nadat je de Chipsoft Clone Content tool en de Database Updater uitgevoert hebt om een nieuwe, lege, Chipsoft HiX omgeving aan te maken kun je vervolgens deze module gebruiken om deze lege omgeving te vullen met specifieke patiëntgegevens.
 
-De module maakt gebruik van de SQL Server Bulk Copy functionaliteit. Om die reden moeten de SQL Server client tools geïnstalleerd zijn op de machine waarop de module uitgevoerd wordt. Normaal gesproken worden de benodigde binaries geïnstalleerd samen met SQL Server Management Studio.
+De module maakt gebruik van cross database query's om data te kopiëren. Om die reden moeten de verschillende databases (bron, doel en HixSubsetCache) binnen dezelfde SQL Server instance aanwezig zijn.
 
 
 ## Hoe de module functioneert
-Bij het uitvoeren van de module wordt er een verbinding opgezet naar de bron database (waarin de patiënt data staat) en naar de doel database (waarin de patiënt data ingeladen moet worden.) Via SQL Bulk Copy commando's wordt vervolgens de data van de bron naar de doel database geladen. 
+Bij het uitvoeren van de module wordt er een verbinding opgezet naar de bron database (waarin de patiënt data staat) en naar de doel database (waarin de patiënt data ingeladen moet worden.) Via SQL commando's wordt vervolgens de data van de bron naar de doel database geladen. 
 
 De data die standaard ingeladen wordt, wordt bepaald aan de hand van twee parameters: `$Timerange` en `$MaxNumberOfPatients`. De `$Timerange` parameter bepaald hoe recent de data van een patiënt moet zijn (in dagen) om geselecteerd te worden voor de inlaad actie. Bijvoorbeeld: een `$Timerange` waarde van **14** selecteert alle unieke patiënt nummers die in de afgelopen 14 dagen, of 14 dagen in de toekomst, een afspraak of opname hebben (gehad). Via de `$MaxNumberOfPatients` parameter kun je vervolgens het aantal patiënten beperken tot een maximum, bijvoorbeeld **100**. Met deze voorbeeld instellingen worden 100 willekeurige patiënten geselecteerd die in de afgelopen 14 dagen, of 14 dagen in de toekomst, een afspraak of opname hebben (gehad). Voor deze patiënten wordt vervolgens de data vanuit de tabellen die in het table import bestand staan ingeladen.
 
@@ -55,12 +66,26 @@ Het table import bestand (standaard **table_list.json**) bevat alle tabellen en 
 - Het **key_column_class** element geeft aan wat voor soort sleutel er gebruikt moet worden om filter uit te voeren.
 - Het **enabled** element geeft aan of deze tabel ingeladen moet worden bij het uitvoeren van het commando. Een waarde van `true` zorgt ervoor dat de tabel ingeladen wordt, `false` dat deze niet ingeladen gaat worden.
 
-Je kan zelf tabellen toevoegen en verwijderen in het table import bestand. Deze worden dan meegenomen op het moment dat je de module uitvoert. Hierbij is het wel van belang dat je weet wat de sleutelwaarde van de tabel is die je wil importeren. Aan de hand hiervan wordt namelijk de selectie gemaakt van gegevens die geimporteerd worden.
+Je kan zelf tabellen toevoegen en verwijderen in het table import bestand. Deze worden dan meegenomen op het moment dat je de module uitvoert. Hierbij is het wel van belang dat je weet wat de sleutelwaarde van de tabel is die je wil importeren. Aan de hand hiervan wordt namelijk de selectie gemaakt van gegevens die geïmporteerd worden.
+
+Vanaf versie 1.1 is het ook mogelijk om volledige tabellen over te kopiëren zonder dat deze op een sleutelkolom waarde gefilterd worden.  Hierbij hoeft er geen **key_column** waarde opgegeven te worden en kun je de **key_column_class** configureren met de waarde **fulltable**.
+
+Voorbeeld:
+
+```
+{
+    "table_name": "WHATSNEW_AUTOREPLY",
+    "hix_module": "",
+    "key_column": "",
+    "key_column_class": "fulltable",    
+    "enabled": true
+}
+```
 
 ### Meer over de key_column en key_column_class elementen
-In veel Chipsoft HiX tabellen is het patiëntnummer het sleutelveld waarop gegevens geimporteerd worden richting de gekloonde database. In veel tabellen heet deze kolom **PATIENTNR** en dat is dus ook vaak de waarde van de **key_column** element in het table import bestand. Indien een patiëntnummer het sleutelveld van een tabel is dan hoort daar een **key_column_class** van **patientnr** bij. Door deze elementen zo te configuren weet de module dat deze gegevens in de brontabel moet selecteren op basis van patiëntnummers die gebruikt worden in de filter op de **PATIENTNR** kolom. 
+In veel Chipsoft HiX tabellen is het patiëntnummer het sleutelveld waarop gegevens geïmporteerd worden richting de gekloonde database. In veel tabellen heet deze kolom **PATIENTNR** en dat is dus ook vaak de waarde van de **key_column** element in het table import bestand. Indien een patiëntnummer het sleutelveld van een tabel is dan hoort daar een **key_column_class** van **patientnr** bij. Door deze elementen zo te configureren weet de module dat deze gegevens in de brontabel moet selecteren op basis van patiëntnummers die gebruikt worden in de filter op de **PATIENTNR** kolom. 
 
-Niet alle tabellen in een Chipsoft HiX database hebben echter het patiëntnummer als sleutelveld. Een voorbeeld hiervan is de **WI_DOCASCII** tabel welke een tekst voorbeeld van een document bevat. Deze tabel heeft als sleutelveld een ID van een document. Om ook deze gegevens te kunnen importeren maken we gebruik van een andere **key_column** en **key_column_class** waarde zodat de module weet dat hier andere waarden dan het patiëntnummer gebruikt moeten worden om de gegevens te filteren. 
+Niet alle tabellen in een Chipsoft HiX database hebben echter het patiëntnummer als sleutelveld. Een voorbeeld hiervan is de **WI_DOCASCII** tabel welke een tekstvoorbeeld van een document bevat. Deze tabel heeft als sleutelveld een ID van een document. Om ook deze gegevens te kunnen importeren maken we gebruik van een andere **key_column** en **key_column_class** waarde zodat de module weet dat hier andere waarden dan het patiëntnummer gebruikt moeten worden om de gegevens te filteren. 
 Het onderstaande voorbeeld is hoe de configuratie er voor de **WI_DOCASCII** eruit ziet in het table import bestand:
 
 ```
@@ -73,7 +98,7 @@ Het onderstaande voorbeeld is hoe de configuratie er voor de **WI_DOCASCII** eru
 }
 ```
 
-In dit geval wordt dus de kolom **DOCID** gebruikt om documenten te selecteren die geimporteerd worden naar de gekloonde omgeving. Door als **key_column_class** de waarde **document_id** te gebruiken weet de module dat hier de ID's van documenten gebruikt moeten worden om rijen in de **WI_DOCASCII** tabel te filteren.
+In dit geval wordt dus de kolom **DOCID** gebruikt om documenten te selecteren die geïmporteerd worden naar de gekloonde omgeving. Door als **key_column_class** de waarde **document_id** te gebruiken weet de module dat hier de ID's van documenten gebruikt moeten worden om rijen in de **WI_DOCASCII** tabel te filteren.
 
 Het ophalen van de ID's voor deze sleutelkolom typen is hard-coded in de module en op dit moment worden de volgende ID typen ondersteund:
 
@@ -104,29 +129,27 @@ De module verwacht op elke regelen in het PatientIDs import bestand één uniek 
 
 - `$SourceSqlInstance`: Bron SQL Server Instance. De connectie naar de SQL Server Instance wordt opgezet doormiddel van Integrated Security, oftewel, de account waaronder deze functie gestart wordt.
 
-- `$SourceDatabase`: Bron database waaruit de patient gegevens geladen worden.
+- `$SourceDatabase`: Bron database waaruit de patiënt gegevens geladen worden.
 
 - `$TargetSqlInstance`: Doel SQL Server Instance. De connectie naar de SQL Server Instance wordt opgezet doormiddel van Integrated Security, oftewel, de account waaronder deze functie gestart wordt.
 
-- `$TargetDatabase`: Doel database waarin de patient gegevens geimporteerd worden.
+- `$TargetDatabase`: Doel database waarin de patiënt gegevens geimporteerd worden.
 
 - `$CloneInputFile`: Een JSON bestand welke de tabellen en de benodigde informatie bevat die gebruikt wordt op het inladen uit te voeren.
 
-- `$Timerange`: Het aantal dagen voor, of na, de huidige datum waarop een patient een afspraak of opname heeft gehad. Uit deze range van datums worden de dynamische patient nummers geselecteerd van welke de data gekopieerd wordt naar de doel database.
+- `$Timerange`: Het aantal dagen voor, of na, de huidige datum waarop een patiënt een afspraak of opname heeft gehad. Uit deze range van datums worden de dynamische patiënt nummers geselecteerd van welke de data gekopieerd wordt naar de doel database.
 
-- `$MaxNumberOfPatients`: Het maximaal aantal dynamische patient nummers die geselecteerd worden uit de datum range die bepaald is door de Timerange parameter. De selectie van deze patient nummers gebeurt willekeurig indien er meer patienten in de gespecificeerde Timerange aanwezig zijn dan er via de MaxNumberOfPatients parameter ingesteld zijn.
+- `$MaxNumberOfPatients`: Het maximaal aantal dynamische patiënt nummers die geselecteerd worden uit de datum range die bepaald is door de Timerange parameter. De selectie van deze patiënt nummers gebeurt willekeurig indien er meer patiënten in de gespecificeerde Timerange aanwezig zijn dan er via de MaxNumberOfPatients parameter ingesteld zijn.
 
-- `$TruncateBeforeLoad`:  Optionele parameter (standaard *false* welke ervoor zorgt dat de doel tabel voor het inladen van de patient data geleegd wordt.
+- `$TruncateBeforeLoad`:  Optionele parameter (standaard *false* welke ervoor zorgt dat de doel tabel voor het inladen van de patiënt data geleegd wordt.
 
-- `$ImportPatientIds`: Optionele parameter (standaard *false* Door deze parameter op *true* te zetten worden zelf gespecificeerde patient nummers toegevoegd aan de lijst van patient nummers van welke de data gekopieerd wordt naar de doel database. Op het moment dat deze parameter op *true* ingesteld staat dient ook de **PatientIdImportFile** parameter gebruikt te worden.
+- `$ImportPatientIds`: Optionele parameter (standaard *false* Door deze parameter op *true* te zetten worden zelf gespecificeerde patiënt nummers toegevoegd aan de lijst van patiënt nummers van welke de data gekopieerd wordt naar de doel database. Op het moment dat deze parameter op *true* ingesteld staat dient ook de **PatientIdImportFile** parameter gebruikt te worden.
 
-- `$PatientIdImportFile`: Optionele parameter. Geeft de locatie aan van het patient nummer import bestand. Elk patient nummer wat voorkomt in dit import bestand wordt toegevoegd aan de lijst van patient nummers van welke de data gekopieerd wordt naar de doel database. Elke regel in het patient nummer import bestand dient een uniek patien nummer te zijn.
+- `$PatientIdImportFile`: Optionele parameter. Geeft de locatie aan van het patiënt nummer import bestand. Elk patiënt nummer wat voorkomt in dit import bestand wordt toegevoegd aan de lijst van patiënt nummers van welke de data gekopieerd wordt naar de doel database. Elke regel in het patiënt nummer import bestand dient een uniek patien nummer te zijn.
 
-- `$OnlyUseImportedPatientIds`: Optionele parameter (standaard *false* Door deze parameter op *true* te zetten worden er geen dynamisch geselecteerde patient nummers geimporteerd en alleen de patient nummers die in het patient nummer import bestand staan gebruikt voor het inladen van gegevens naar de doel database. Op het moment dat deze parameter op *true* staat moeten ook de **ImportPatientIds** op *true* gezet zijn en de **PatientIdImportFile** parameter gevuld zijn.
+- `$OnlyUseImportedPatientIds`: Optionele parameter (standaard *false* Door deze parameter op *true* te zetten worden er geen dynamisch geselecteerde patiënt nummers geimporteerd en alleen de patiënt nummers die in het patiënt nummer import bestand staan gebruikt voor het inladen van gegevens naar de doel database. Op het moment dat deze parameter op *true* staat moeten ook de **ImportPatientIds** op *true* gezet zijn en de **PatientIdImportFile** parameter gevuld zijn.
 
-- `$BatchSize`: Optionele paramater (standaard 10000) welke de grote van de kopie batch aangeeft.
-
-- `$Timeout`:  Optionele parameter (standaard 60) welke de timeout in seconden aangeeft van elke batch van het kopieer commando. Indien de batch meer tijd dan de timeout in beslag neemt wordt deze automatisch afgebroken. Door de Timeout op 0 te zetten wordt er geen timeout gebruikt.
+- `$Timeout`:  Optionele parameter (standaard 0) welke de timeout in seconden aangeeft van elke batch van het kopieer commando. Indien de batch meer tijd dan de timeout in beslag neemt wordt deze automatisch afgebroken. Door de Timeout op 0 te zetten wordt er geen timeout gebruikt.
 
 - `$ContinueOnError`: Optionele parameter (standaard *false*). Door deze parameter op *true* te zetten gaat het script bij sommige errors - zoals het inladen van data in de doel database - door naar de volgende actie in plaats van af te breken.
 
@@ -155,7 +178,7 @@ Kopieert de patientgegevens voor de gespecificeerde tabellen in het clone input 
 `Start-SubsetHixDatabase -SourceSqlInstance "SQL-BRON01" -SourceDatabase "HIX_BRON" -TargetSqlInstance "SQL-DOEL01" -TargetDatabase "HIX_CLONE" -CloneInputFile "C:\table_list.json" -Timerange 14 -MaxNumberOfPatients 100 -ImportPatientIds $true -PatientIdImportFile "C:\patientIds.txt" -OnlyUseImportedPatientIds $true`
 
 ## Ondersteuning
-De Chipsoft HiX Subset Module is een opensource initatief wat we met veel zorg hebben geprobeerd te ontwikkelen en te testen. Toch kan er uiteraard een bug in de code sluipen of een functionaliteit ontbreken. Meld deze vooral aan via de **Issues** optie op deze GitHub pagina. We proberen dan zo snel mogelijk te reageren.
+De Chipsoft HiX Subset Module is een opensource initiatief wat we met veel zorg hebben geprobeerd te ontwikkelen en te testen. Toch kan er uiteraard een bug in de code sluipen of een functionaliteit ontbreken. Meld deze vooral aan via de **Issues** optie op deze GitHub pagina. We proberen dan zo snel mogelijk te reageren.
 
 Mocht je na het gebruik van de Chipsoft HiX Subset Module erachter komen dat er nog gegevens gebruiken en weten in welke tabellen deze te vinden zijn? Maak ook dan een issue aan en dan voegen we de tabellen toe aan de het tabel import bestand!
 
@@ -165,7 +188,7 @@ Bij Privinity helpen we organisaties om veilig te kunnen werken met privacygevoe
 ## Disclaimer
 De Chipsoft HiX Subset Module is een oplossing die ontwikkeld is om een antwoord de geven op de vraag vanuit ziekenhuizen om met een kleinere set van data meerdere Chipsoft HiX omgevingen te kunnen uitrollen en gebruiken voor ontwikkel- en testdoeleinden. De module is niet door Chipsoft ontwikkeld en draagt puur de naam Chipsoft en HiX om duidelijk aan te geven op welk product deze oplossing van toepassing is. 
 
-Al het gebruik van de Chipsoft HiX Subset Module is op eigen risico. Zowel Privinity als de originele auteur van de code kan niet aansprakelijk worden gesteld voor enige schade die onstaat uit het gebruik van de module.
+Al het gebruik van de Chipsoft HiX Subset Module is op eigen risico. Zowel Privinity als de originele auteur van de code kan niet aansprakelijk worden gesteld voor enige schade die ontstaat uit het gebruik van de module.
 
 ## Licentie
 De GNU Affero General Public License Versie 3 (AGPL 3) is van toepassing op dit project.
